@@ -1,0 +1,11 @@
+services:
+  drive-temps-web:
+    image: python:3-slim
+    container_name: drive-temps-web
+    ports:
+      - "8099:8000"
+    volumes:
+      - /opt/Docker/drive-temps:/usr/src/app:ro
+    working_dir: /usr/src/app
+    command: python -m http.server 8000
+    restart: unless-stopped

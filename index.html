@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Drive Temperatures</title>
+  <style>
+    body {
+      background: #000;
+      color: #fff;
+      font-family: monospace;
+      padding: 1em;
+    }
+    #header {
+      margin-bottom: 1em;
+    }
+    #title {
+      font-size: 1.5em;
+      margin: 0;
+    }
+    #hostname, #timestamp {
+      margin: 0;
+      font-size: 1em;
+      color: #ccc;
+    }
+    #temps {
+      white-space: pre;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <p id="title">Drive Temperatures</p>
+    <p id="hostname">Loading hostname…</p>
+    <p id="timestamp">Loading time…</p>
+  </div>
+  <div id="temps">Loading drive data…</div>
+
+  <script>
+    const tempsUrl = 'drive_temps.txt';
+
+    // Display server hostname from the URL
+    function showHostname() {
+      document.getElementById('hostname').textContent = location.hostname;
+    }
+
+    // Fetch and display temperatures and update timestamp
+    async function updateAll() {
+      try {
+        const res = await fetch(`${tempsUrl}?_=${Date.now()}`);
+        if (!res.ok) throw new Error(res.statusText);
+        const text = await res.text();
+        // Split into lines and filter out blank lines
+        const lines = text.split('\n').filter(line => line.trim() !== '');
+        // First line is timestamp
+        const timestamp = lines[0];
+        // Remaining lines are data
+        const data = lines.slice(1).join('\n');
+        document.getElementById('timestamp').textContent = timestamp;
+        document.getElementById('temps').textContent = data;
+      } catch (e) {
+        console.error('Fetch error:', e);
+      }
+    }
+
+    // Schedule aligned updates
+    const now = new Date();
+    const msToNext = (60 - now.getSeconds()) * 1000 - now.getMilliseconds() + 2000;
+
+    showHostname();
+    setTimeout(() => {
+      updateAll();
+      setInterval(updateAll, 60 * 1000);
+    }, msToNext);
+  </script>
+</body>
+</html>
+
