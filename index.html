@@ -50,20 +50,25 @@
         const res = await fetch(`${tempsUrl}?_=${Date.now()}`);
         if (!res.ok) throw new Error(res.statusText);
         const text = await res.text();
+
         // Split into lines and filter out blank lines
         const lines = text.split('\n').filter(line => line.trim() !== '');
-        // First line is timestamp
-        const timestamp = lines[0];
+
+        // First two lines are timestamp label and time
+        const timestampLabel = lines[0] || '';
+        const timestampTime = lines[1] || '';
+
         // Remaining lines are data
-        const data = lines.slice(1).join('\n');
-        document.getElementById('timestamp').textContent = timestamp;
+        const data = lines.slice(2).join('\n');
+
+        document.getElementById('timestamp').innerHTML = timestampLabel + '<br>' + timestampTime;
         document.getElementById('temps').textContent = data;
       } catch (e) {
         console.error('Fetch error:', e);
       }
     }
 
-    // Schedule aligned updates
+    // Schedule aligned updates every minute
     const now = new Date();
     const msToNext = (60 - now.getSeconds()) * 1000 - now.getMilliseconds() + 2000;
 

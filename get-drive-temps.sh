@@ -5,7 +5,8 @@ TMPFILE="$OUTDIR/drive_temps.tmp"
 FINAL="$OUTDIR/drive_temps.txt"
 
 {
-  echo "Last updated: $(date '+%Y-%m-%d %H:%M:%S')"
+  echo "Last updated:"
+  echo "$(date '+%Y-%m-%d %H:%M:%S')"
   echo ""
 
   mapfile -t drives < <(
