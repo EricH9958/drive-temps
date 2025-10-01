@@ -28,6 +28,20 @@ This project provides scripts and configuration files to monitor hard drive temp
 3. Run `docker-compose up -d` to start the service
 4. Add the applet URL to your Homarr dashboard
 
+
+## Drive Temperatures Widget Timestamp Format
+
+- The widget now displays the “Last updated:” label and the timestamp on separate lines for improved readability in narrow views.
+- This requires the `drive_temps.txt` file to have two lines for the timestamp section:
+Last updated:
+2025-10-01 10:56:01
+
+text
+
+- The index.html script has been updated to parse and show these two lines correctly.
+
+
+
 ## Usage
 
 The script runs periodically inside the container and updates data for display.
